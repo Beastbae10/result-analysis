@@ -1,5 +1,5 @@
-import { Box, Button, IconButton, Typography, useTheme, MenuItem, TextField } from "@mui/material";
-import React from 'react';
+import * as React from 'react';
+import { Box, Button, IconButton, Typography, useTheme, MenuItem, TextField, Menu} from "@mui/material";
 import Header from '../../components/header';
 import { useState, useRef } from "react";
 import { useContext } from "react";
@@ -13,6 +13,8 @@ const Overview = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   {/*const colorMode = useContext(ColorModeContext);*/}
+
+   //dropdown menu
 
   const [dept, setDept]=useState('')
 const deptInfo=["CSE", "EEE", "EC" , "CE"]
@@ -37,7 +39,28 @@ const yrInfo=[ "1950",
 const [sem, setSem]=useState('')
 const semInfo=["S1","S2","S3","S4","S5","S6","S7","S8"]
 
-const [files, setFiles] = useState( );
+
+const [fil, setFil]=useState('')
+const filInfo=["DOB","A to z","Z to A","Highest to Lowesr","Lowest to Highest"]
+
+
+//filter
+const [anchorEl, setAnchorEl] = React.useState(() => null) ;
+const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+
+
+
+
+//dragndrop
+
+const [files, setFiles] = useState();
   const inputRef = useRef();
 
   const handleDragOver = (event) => {
@@ -75,6 +98,7 @@ const [files, setFiles] = useState( );
         </div>
     </div>
     </div>
+   
     
   )
   
@@ -160,9 +184,14 @@ const [files, setFiles] = useState( );
      
     
     
-         
+       
           <Button
-            sx={{
+           id="basic-button"
+           aria-controls={open ? 'basic-menu' : undefined}
+           aria-haspopup="true"
+           aria-expanded={open ? 'true' : undefined}
+           onClick={handleClick}
+              sx={{
               backgroundColor:colors.primary[400],
               color: colors.greenAccent[500],
               fontSize: "14px",
@@ -176,8 +205,37 @@ const [files, setFiles] = useState( );
                }}
           >
             <FilterAltOutlinedIcon sx={{ mr: "10px" }} />
-            FILTER
-          </Button>
+             FILTER
+             </Button>
+             <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+          }}
+          
+        >
+
+        <MenuItem onClick={handleClose} sx={{color:"rgb(76, 206, 172)"}}><TextField label="Sort By"
+         value={fil}
+         onChange={e=>setFil(e.target.value)}
+         select
+         SelectProps={{  }}
+         sx={{width:"200px", backgroundColor:"rgb(31, 42, 64)"}}> Sort By
+         {filInfo.map((fil) => (
+        <MenuItem value={fil} key={fil} sx={{color:"rgb(76, 206, 172)"}} >
+         {fil}
+        </MenuItem>   
+     ))}
+     </TextField>
+     </MenuItem>
+        
+      </Menu>
+            
           </Box>
           </Box>
 
